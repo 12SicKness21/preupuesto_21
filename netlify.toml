@@ -1,0 +1,21 @@
+# Netlify Configuration
+# Documentación: https://docs.netlify.com/configure-builds/file-based-configuration/
+
+[build]
+  # No build command needed - static HTML site
+  publish = "."
+
+[[redirects]]
+  # Redirect root to index.html
+  from = "/"
+  to = "/index.html"
+  status = 200
+
+[[headers]]
+  # Security headers
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"

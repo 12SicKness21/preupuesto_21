@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Presupuesto Mensual 21</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .glass {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .dark .glass {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        @keyframes blob {
+
+            0%,
+            100% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            25% {
+                transform: translate(20px, -50px) scale(1.1);
+            }
+
+            50% {
+                transform: translate(-20px, 20px) scale(0.9);
+            }
+
+            75% {
+                transform: translate(50px, 10px) scale(1.05);
+            }
+        }
+
+        .animate-blob {
+            animation: blob 8s infinite;
+        }
+
+        .animation-delay-2 {
+            animation-delay: 2s;
+        }
+
+        .animation-delay-4 {
+            animation-delay: 4s;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 min-h-screen flex items-center justify-center p-4 transition-colors duration-300 relative overflow-hidden">
+
+    <!-- Animated Background Blobs -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none opacity-60 dark:opacity-30">
+        <div
+            class="absolute top-0 -left-4 w-72 h-72 bg-purple-300 dark:bg-purple-900 rounded-full mix-blend-multiply dark:mix-blend-normal filter blur-xl animate-blob">
+        </div>
+        <div
+            class="absolute top-0 -right-4 w-72 h-72 bg-yellow-300 dark:bg-yellow-900 rounded-full mix-blend-multiply dark:mix-blend-normal filter blur-xl animate-blob animation-delay-2">
+        </div>
+        <div
+            class="absolute -bottom-8 left-20 w-72 h-72 bg-pink-300 dark:bg-pink-900 rounded-full mix-blend-multiply dark:mix-blend-normal filter blur-xl animate-blob animation-delay-4">
+        </div>
+    </div>
+
+    <!-- Login Card -->
+    <div class="glass rounded-3xl shadow-2xl p-8 md:p-12 w-full max-w-md relative z-10">
+        <div class="text-center mb-8">
+            <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl mb-4 shadow-lg overflow-hidden">
+                <img src="assets/1.png" alt="Logo" class="w-full h-full object-cover">
+            </div>
+            <h1 class="text-3xl font-bold text-slate-800 dark:text-white mb-2">Presupuesto Mensual 21</h1>
+            <p class="text-slate-600 dark:text-slate-300">Gestiona tus finanzas con inteligencia</p>
+        </div>
+
+        <!-- Error Message -->
+        <div id="errorMessage"
+            class="hidden bg-red-100 dark:bg-red-900/30 border border-red-400 dark:border-red-700 text-red-700 dark:text-red-300 px-4 py-3 rounded-lg mb-4 text-sm">
+            <i class="fas fa-exclamation-circle mr-2"></i>
+            <span id="errorText"></span>
+        </div>
+
+        <!-- Login Form -->
+        <form id="loginForm" class="space-y-6">
+            <div>
+                <label for="email" class="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">
+                    <i class="fas fa-envelope mr-2"></i>Correo Electrónico
+                </label>
+                <input type="email" id="email" autocomplete="email"
+                    class="w-full px-4 py-3 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all text-slate-800 dark:text-white"
+                    placeholder="usuario@ejemplo.com" required>
+            </div>
+
+            <div>
+                <label for="password" class="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">
+                    <i class="fas fa-lock mr-2"></i>Contraseña
+                </label>
+                <div class="relative">
+                    <input type="password" id="password" autocomplete="current-password"
+                        class="w-full px-4 py-3 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all text-slate-800 dark:text-white pr-12"
+                        placeholder="••••••••" required>
+                    <button type="button" id="togglePassword"
+                        class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+            </div>
+
+            <button type="submit"
+                class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200">
+                <i class="fas fa-sign-in-alt mr-2"></i>Iniciar Sesión
+            </button>
+        </form>
+
+        <!-- Demo Credentials Info -->
+        <div class="mt-6 pt-6 border-t border-slate-200 dark:border-slate-700">
+            <p class="text-xs text-slate-500 dark:text-slate-400 text-center">
+                <i class="fas fa-info-circle mr-1"></i>
+                <strong>Credenciales de prueba:</strong><br>
+                Usuario: <code class="bg-slate-200 dark:bg-slate-700 px-2 py-0.5 rounded">prueba@prueba.com</code><br>
+                Contraseña: <code class="bg-slate-200 dark:bg-slate-700 px-2 py-0.5 rounded">prueba</code>
+            </p>
+        </div>
+    </div>
+
+    <!-- Theme Toggle -->
+    <button id="themeToggle"
+        class="fixed bottom-6 right-6 w-14 h-14 bg-white dark:bg-slate-800 text-slate-800 dark:text-yellow-400 rounded-full shadow-xl border border-slate-200 dark:border-slate-700 flex items-center justify-center text-xl hover:shadow-2xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all z-50">
+        <i class="fas fa-sun hidden dark:block"></i>
+        <i class="fas fa-moon block dark:hidden"></i>
+    </button>
+
+    <script src="js/auth.js"></script>
+    <script>
+        // Initialize theme
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        }
+
+        // Theme toggle
+        document.getElementById('themeToggle').addEventListener('click', () => {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.theme = 'light';
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.theme = 'dark';
+            }
+        });
+
+        // Password toggle
+        document.getElementById('togglePassword').addEventListener('click', function () {
+            const passwordInput = document.getElementById('password');
+            const icon = this.querySelector('i');
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        });
+
+        // Login form submission
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            if (Auth.login(email, password)) {
+                window.location.href = 'app.html';
+            } else {
+                const errorDiv = document.getElementById('errorMessage');
+                const errorText = document.getElementById('errorText');
+                errorText.textContent = 'Credenciales incorrectas. Por favor, intenta de nuevo.';
+                errorDiv.classList.remove('hidden');
+
+                // Shake animation
+                errorDiv.classList.add('animate-shake');
+                setTimeout(() => {
+                    errorDiv.classList.remove('animate-shake');
+                }, 500);
+            }
+        });
+    </script>
+</body>
+
+</html>

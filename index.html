@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Presupuesto Mensual 21 - Gestión Inteligente</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        slate: {
+                            850: '#1e293b', /* Custom deeper slate */
+                        },
+                        indigo: {
+                            600: '#4f46e5',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+
+    <script>
+        // Auto-redirect to login if not authenticated
+        window.addEventListener('DOMContentLoaded', () => {
+            const session = localStorage.getItem('pm21_session');
+            if (session) {
+                try {
+                    const sessionData = JSON.parse(session);
+                    if (sessionData.isAuthenticated) {
+                        window.location.href = 'app.html';
+                        return;
+                    }
+                } catch (e) { }
+            }
+            // If not authenticated, redirect to login after showing landing
+            setTimeout(() => {
+                window.location.href = 'login.html';
+            }, 1500);
+        });
+    </script>
+</head>
+
+<body
+    class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-300">
+
+    <!-- Hero Section -->
+    <div class="flex-grow flex items-center justify-center p-6 relative overflow-hidden">
+
+        <!-- Decorative Background Blobs -->
+        <div
+            class="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 opacity-30 dark:opacity-20 pointer-events-none">
+            <div
+                class="absolute top-10 left-10 w-72 h-72 bg-indigo-500 rounded-full mix-blend-multiply filter blur-3xl animate-blob">
+            </div>
+            <div
+                class="absolute top-10 right-10 w-72 h-72 bg-emerald-500 rounded-full mix-blend-multiply filter blur-3xl animate-blob animation-delay-2000">
+            </div>
+            <div
+                class="absolute -bottom-8 left-20 w-72 h-72 bg-pink-500 rounded-full mix-blend-multiply filter blur-3xl animate-blob animation-delay-4000">
+            </div>
+        </div>
+
+        <div
+            class="max-w-4xl w-full text-center space-y-8 animate-fade-in relative z-10 glass rounded-3xl p-12 shadow-2xl border border-white/20 dark:border-slate-700/50">
+
+            <div
+                class="inline-flex items-center justify-center p-4 bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-300 rounded-2xl mb-4 shadow-sm">
+                <i class="fa-solid fa-wallet text-4xl"></i>
+            </div>
+
+            <h1
+                class="text-5xl md:text-7xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-cyan-500 dark:from-indigo-400 dark:to-cyan-300">
+                Presupuesto Mensual 21
+            </h1>
+
+            <p class="text-xl md:text-2xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
+                Control total de tus finanzas con calendario interactivo, tarjetas personalizables y análisis histórico.
+                100% privado, tus datos nunca salen de tu navegador.
+            </p>
+
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mt-8">
+                <a href="app.html"
+                    class="group relative px-8 py-4 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 hover:shadow-indigo-500/30 transition-all duration-300 transform hover:-translate-y-1 overflow-hidden">
+                    <span class="relative z-10 flex items-center gap-2">
+                        Ingresar a la App <i
+                            class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                    </span>
+                    <div
+                        class="absolute inset-0 bg-gradient-to-r from-indigo-500 to-indigo-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    </div>
+                </a>
+
+                <button id="resetDataHtml"
+                    class="px-8 py-4 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-semibold rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors shadow-sm hidden">
+                    Limpiar Datos
+                </button>
+            </div>
+
+            <div
+                class="pt-8 flex items-center justify-center gap-8 text-slate-400 dark:text-slate-500 grayscale opacity-70">
+                <div class="flex items-center gap-2"><i class="fa-brands fa-html5 text-xl"></i> HTML5</div>
+                <div class="flex items-center gap-2"><i class="fa-brands fa-js text-xl"></i> Vanilla JS</div>
+                <div class="flex items-center gap-2"><i class="fa-solid fa-wind text-xl"></i> Tailwind</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Theme Toggle FAB -->
+    <button id="themeToggle"
+        class="fab-toggle w-14 h-14 bg-white dark:bg-slate-800 text-slate-800 dark:text-yellow-400 rounded-full shadow-xl border border-slate-200 dark:border-slate-700 flex items-center justify-center text-xl hover:shadow-2xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-slate-900 transition-colors">
+        <i class="fa-solid fa-sun hidden dark:block"></i>
+        <i class="fa-solid fa-moon block dark:hidden"></i>
+    </button>
+
+    <!-- Simple JS for Landing -->
+    <script>
+        // Init Theme
+        const themeToggle = document.getElementById('themeToggle');
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+
+        themeToggle.addEventListener('click', () => {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.theme = 'light';
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.theme = 'dark';
+            }
+        });
+
+        // Background animation style
+        const style = document.createElement('style');
+        style.innerHTML = `
+            @keyframes blob {
+                0% { transform: translate(0px, 0px) scale(1); }
+                33% { transform: translate(30px, -50px) scale(1.1); }
+                66% { transform: translate(-20px, 20px) scale(0.9); }
+                100% { transform: translate(0px, 0px) scale(1); }
+            }
+            .animate-blob {
+                animation: blob 7s infinite;
+            }
+            .animation-delay-2000 {
+                animation-delay: 2s;
+            }
+            .animation-delay-4000 {
+                animation-delay: 4s;
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+
+</html>

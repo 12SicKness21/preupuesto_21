@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Presupuesto Mensual 21</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+
+            body {
+                background: white !important;
+            }
+
+            .print-break {
+                page-break-after: always;
+            }
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+        }
+
+        .dark .glass {
+            background: rgba(15, 23, 42, 0.95);
+        }
+
+        /* Sticky balance on mobile */
+        @media (max-width: 768px) {
+            .sticky-balance {
+                position: sticky;
+                top: 64px;
+                z-index: 30;
+                margin-bottom: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body
+    class="bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 min-h-screen transition-colors duration-300">
+
+    <!-- Top Navigation -->
+    <nav class="glass border-b border-slate-200 dark:border-slate-700 sticky top-0 z-40 no-print">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl flex items-center justify-center shadow-lg"
+                        style="background: linear-gradient(to bottom right, #0066CC, #0052A3);">
+                        <i class="fas fa-wallet text-white"></i>
+                    </div>
+                    <h1 class="text-xl font-bold text-slate-800 dark:text-white">Presupuesto 21</h1>
+                </div>
+
+                <!-- Right Side: Theme Toggle + Hamburger Menu -->
+                <div class="flex items-center gap-3">
+                    <!-- Theme Toggle -->
+                    <button id="themeToggleHeader" onclick="App.toggleTheme()"
+                        class="w-10 h-10 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-yellow-400 rounded-lg transition-colors flex items-center justify-center"
+                        title="Cambiar tema">
+                        <i class="fas fa-sun hidden dark:block"></i>
+                        <i class="fas fa-moon block dark:hidden"></i>
+                    </button>
+
+                    <!-- Hamburger Menu Button -->
+                    <button id="menuToggle" onclick="toggleMenu()"
+                        class="w-10 h-10 text-white rounded-lg transition-colors flex items-center justify-center"
+                        style="background-color: #0066CC;" onmouseover="this.style.backgroundColor='#0052A3'"
+                        onmouseout="this.style.backgroundColor='#0066CC'" title="Menú">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dropdown Menu -->
+        <div id="dropdownMenu"
+            class="hidden bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 shadow-lg">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+                <div class="flex flex-col gap-3">
+                    <!-- Currency Selector -->
+                    <div class="flex items-center gap-3">
+                        <i class="fas fa-coins w-5" style="color: #0066CC;"></i>
+                        <label class="text-sm font-medium text-slate-700 dark:text-slate-300 w-32">Tipo de
+                            Moneda</label>
+                        <select id="currencySelect"
+                            class="flex-1 px-3 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-sm font-semibold text-slate-700 dark:text-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none cursor-pointer">
+                        </select>
+                    </div>
+
+                    <!-- Export PDF -->
+                    <button onclick="window.print()"
+                        class="flex items-center gap-3 px-3 py-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors text-left">
+                        <i class="fas fa-file-pdf w-5" style="color: #0066CC;"></i>
+                        <span class="text-sm font-medium text-slate-700 dark:text-slate-300">Exportar PDF</span>
+                    </button>
+
+                    <!-- Reset Data -->
+                    <button onclick="Storage.resetAll()"
+                        class="flex items-center gap-3 px-3 py-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors text-left">
+                        <i class="fas fa-trash-can text-red-600 dark:text-red-400 w-5"></i>
+                        <span class="text-sm font-medium text-slate-700 dark:text-slate-300">Limpiar Datos</span>
+                    </button>
+
+                    <!-- Contact -->
+                    <button onclick="openContactModal()"
+                        class="flex items-center gap-3 px-3 py-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors text-left">
+                        <i class="fas fa-envelope w-5" style="color: #0066CC;"></i>
+                        <span class="text-sm font-medium text-slate-700 dark:text-slate-300">Contacto /
+                            Sugerencias</span>
+                    </button>
+
+                    <!-- Logout -->
+                    <button onclick="Auth.logout()"
+                        class="flex items-center gap-3 px-3 py-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors text-left">
+                        <i class="fas fa-sign-out-alt text-slate-600 dark:text-slate-400 w-5"></i>
+                        <span class="text-sm font-medium text-slate-700 dark:text-slate-300">Cerrar Sesión</span>
+                    </button>
+
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+
+        <!-- Calendar and Balance Row - Sticky -->
+        <div
+            class="sticky top-16 z-30 bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 pb-6 -mx-4 px-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-2 pt-2">
+                <!-- Calendar -->
+                <div class="lg:col-span-1">
+                    <div id="calendarContainer"></div>
+                </div>
+
+                <!-- Balance Card -->
+                <div class="lg:col-span-2 no-print">
+                    <div
+                        class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 py-2 px-3">
+                        <div class="flex items-center justify-between mb-1">
+                            <p class="text-sm font-medium text-slate-500 dark:text-slate-400">Restante</p>
+                            <div
+                                class="w-8 h-8 bg-indigo-100 dark:bg-indigo-900/30 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-wallet text-indigo-600 dark:text-indigo-400 text-sm"></i>
+                            </div>
+                        </div>
+                        <p id="balance" class="text-2xl font-bold text-emerald-600 dark:text-emerald-400">€0.00</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Income and Expenses - Scrollable -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 no-print">
+            <!-- Income -->
+            <div
+                class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 py-2 px-3">
+                <div class="flex items-center justify-between mb-1">
+                    <p class="text-sm font-medium text-slate-500 dark:text-slate-400">Ingresos</p>
+                    <div
+                        class="w-8 h-8 bg-emerald-100 dark:bg-emerald-900/30 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-hand-holding-dollar text-emerald-600 dark:text-emerald-400 text-sm"></i>
+                    </div>
+                </div>
+                <p id="totalIncome" class="text-xl font-bold text-emerald-600 dark:text-emerald-400">€0.00
+                </p>
+            </div>
+
+            <!-- Expenses -->
+            <div
+                class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 py-2 px-3">
+                <div class="flex items-center justify-between mb-1">
+                    <p class="text-sm font-medium text-slate-500 dark:text-slate-400">Egresos</p>
+                    <div class="w-8 h-8 bg-rose-100 dark:bg-rose-900/30 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-cart-shopping text-rose-600 dark:text-rose-400 text-sm"></i>
+                    </div>
+                </div>
+                <p id="totalExpenses" class="text-xl font-bold text-rose-600 dark:text-rose-400">€0.00</p>
+            </div>
+        </div>
+
+        <!-- Charts Section - Only Breakdown Chart -->
+        <div class="space-y-6 no-print">
+            <!-- Breakdown Chart -->
+            <div
+                class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 overflow-hidden">
+                <button onclick="toggleChart('breakdownChartContent')"
+                    class="w-full p-4 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
+                    <h2 class="text-lg font-bold text-slate-800 dark:text-white">
+                        <i class="fas fa-chart-pie mr-2 text-purple-600 dark:text-purple-400"></i>
+                        Distribución de Egresos
+                    </h2>
+                    <i class="fas fa-chevron-down text-slate-400 transition-transform"
+                        id="breakdownChartContent-icon"></i>
+                </button>
+                <div id="breakdownChartContent" class="hidden p-6 pt-0">
+                    <div class="h-64">
+                        <canvas id="breakdownChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Budget Cards Grid -->
+        <div>
+            <div class="flex items-center justify-between mb-6 no-print">
+                <h2 class="text-2xl font-bold text-slate-800 dark:text-white">
+                    <i class="fas fa-layer-group mr-2"></i>Categorías
+                </h2>
+                <button onclick="Cards.addNewCard()"
+                    class="px-4 py-2 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all no-print"
+                    style="background: linear-gradient(to right, #0066CC, #0052A3);"
+                    onmouseover="this.style.background='linear-gradient(to right, #0052A3, #003d7a)'"
+                    onmouseout="this.style.background='linear-gradient(to right, #0066CC, #0052A3)'">
+                    <i class="fas fa-plus mr-2"></i>Nuevo Egreso
+                </button>
+            </div>
+            <div id="cardsContainer" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                <!-- Cards will be rendered here by JS -->
+            </div>
+        </div>
+
+    </main>
+
+
+
+
+
+    <!-- Contact Modal -->
+    <div id="contactModal" class="fixed inset-0 z-50 hidden" role="dialog" aria-modal="true">
+        <!-- Backdrop -->
+        <div class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm transition-opacity" onclick="closeContactModal()">
+        </div>
+
+        <div class="fixed inset-0 z-10 overflow-y-auto flex items-center justify-center p-4">
+            <div
+                class="relative transform overflow-hidden rounded-2xl bg-white dark:bg-slate-800 text-left shadow-xl transition-all w-full max-w-md">
+                <!-- Business card image header -->
+                <div>
+                    <img src="assets/tarjeta.png" alt="Angelo Rodriguez - Tarjeta de Contacto"
+                        class="w-full h-auto rounded-t-2xl">
+                </div>
+
+                <!-- Body -->
+                <div class="px-6 py-4 space-y-3">
+                    <!-- Email -->
+                    <a href="mailto:angelo.rodriguezreyes@gmail.com"
+                        class="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-700/50 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors group">
+                        <div class="w-10 h-10 rounded-full flex items-center justify-center"
+                            style="background: linear-gradient(to bottom right, #0066CC, #0052A3);">
+                            <i class="fas fa-envelope text-white text-sm"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">Email</p>
+                            <p
+                                class="text-sm font-semibold text-slate-800 dark:text-white truncate group-hover:text-[#0066CC]">
+                                angelo.rodriguezreyes@gmail.com
+                            </p>
+                        </div>
+                        <i class="fas fa-arrow-right text-slate-400 group-hover:text-[#0066CC] transition-colors"></i>
+                    </a>
+
+                    <!-- WhatsApp -->
+                    <a href="https://wa.me/34600854768" target="_blank"
+                        class="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-700/50 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors group">
+                        <div
+                            class="w-10 h-10 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center">
+                            <i class="fab fa-whatsapp text-white text-xl"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">WhatsApp</p>
+                            <p class="text-sm font-semibold text-slate-800 dark:text-white group-hover:text-green-600">
+                                +34 600 854 768
+                            </p>
+                        </div>
+                        <i class="fas fa-arrow-right text-slate-400 group-hover:text-green-600 transition-colors"></i>
+                    </a>
+                </div>
+
+                <!-- Footer -->
+                <div class="bg-slate-50 dark:bg-slate-700/50 px-6 py-4 text-center">
+                    <button type="button" onclick="closeContactModal()"
+                        class="px-6 py-2 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 text-sm font-semibold rounded-lg hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors">
+                        Cerrar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Celebration Modal -->
+    <div id="celebrationModal" class="fixed inset-0 z-50 hidden flex items-center justify-center" role="dialog"
+        aria-modal="true">
+        <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm"></div>
+        <div class="relative z-10 text-center">
+            <div class="bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl shadow-2xl p-8 max-w-md">
+                <div class="text-5xl mb-3">✓</div>
+                <h2 class="text-3xl font-bold text-white mb-2">¡Excelente trabajo!</h2>
+                <p class="text-lg text-white/90">Fuiste consecuente con lo presupuestado</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Item Add/Edit Modal -->
+    <div id="itemModal" class="fixed inset-0 z-50 hidden" role="dialog" aria-modal="true">
+        <!-- Backdrop -->
+        <div class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm transition-opacity" onclick="Cards.closeItemModal()">
+        </div>
+
+        <div class="fixed inset-0 z-10 overflow-y-auto flex items-center justify-center p-4">
+            <div
+                class="relative transform overflow-hidden rounded-2xl bg-white dark:bg-slate-800 text-left shadow-xl transition-all w-full max-w-md">
+                <!-- Header -->
+                <div class="px-6 pt-6 pb-4">
+                    <h3 class="text-2xl font-bold text-slate-900 dark:text-white" id="itemModalTitle">
+                        Agregar Elemento
+                    </h3>
+                </div>
+
+                <!-- Form -->
+                <div class="px-6 pb-6 space-y-4">
+                    <!-- Concepto -->
+                    <div>
+                        <label for="itemConcepto"
+                            class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                            Concepto
+                        </label>
+                        <input type="text" id="itemConcepto"
+                            class="w-full px-4 py-3 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-slate-800 dark:text-white"
+                            placeholder="Ej: Alquiler, Salario, etc.">
+                    </div>
+
+                    <!-- Importe (antes Presupuesto) -->
+                    <div>
+                        <label for="itemPresupuesto"
+                            class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                            Importe
+                        </label>
+                        <input type="number" step="0.01" inputmode="decimal" id="itemPresupuesto"
+                            class="w-full px-4 py-3 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-slate-800 dark:text-white"
+                            placeholder="0.00">
+                    </div>
+
+                    <!-- Fecha -->
+                    <div>
+                        <label for="itemFecha"
+                            class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                            Fecha
+                        </label>
+                        <input type="date" id="itemFecha"
+                            class="w-full px-4 py-3 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-slate-800 dark:text-white">
+                    </div>
+                </div>
+
+                <!-- Footer with Delete button when editing -->
+                <div class="bg-slate-50 dark:bg-slate-700/50 px-4 py-3 flex gap-2 justify-between">
+                    <button type="button" id="deleteItemBtn" onclick="Cards.deleteCurrentItem()"
+                        class="hidden px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all">
+                        <i class="fas fa-trash-can mr-1"></i>Eliminar
+                    </button>
+                    <div class="flex gap-2 ml-auto">
+                        <button type="button" onclick="Cards.closeItemModal()"
+                            class="px-4 py-2 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 text-sm font-semibold rounded-lg hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors">
+                            Cancelar
+                        </button>
+                        <button type="button" onclick="Cards.saveItemFromModal()"
+                            class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all">
+                            Guardar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/auth.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/calendar.js"></script>
+    <script src="js/currency.js"></script>
+    <script src="js/charts.js"></script>
+    <script src="js/cards.js"></script>
+    <script src="js/app.js"></script>
+
+    <script>
+        // Chart toggle function
+        function toggleChart(chartId) {
+            const content = document.getElementById(chartId);
+            const icon = document.getElementById(chartId + '-icon');
+
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                icon.classList.add('rotate-180');
+                // Initialize charts when opened
+                setTimeout(() => {
+                    if (chartId === 'historicalChartContent') {
+                        Charts.initHistoricalChart('historicalChart');
+                    } else if (chartId === 'breakdownChartContent') {
+                        Charts.initBreakdownChart('breakdownChart', Cards.currentMonthData);
+                    }
+                }, 100);
+            } else {
+                content.classList.add('hidden');
+                icon.classList.remove('rotate-180');
+            }
+        }
+
+
+
+        // Toggle hamburger menu
+        function toggleMenu() {
+            const dropdown = document.getElementById('dropdownMenu');
+            dropdown.classList.toggle('hidden');
+        }
+
+        // Close menu when clicking outside
+        document.addEventListener('click', function (event) {
+            const dropdown = document.getElementById('dropdownMenu');
+            const menuToggle = document.getElementById('menuToggle');
+
+            if (!dropdown.contains(event.target) && !menuToggle.contains(event.target)) {
+                dropdown.classList.add('hidden');
+            }
+        });
+
+        // Contact modal functions
+        function openContactModal() {
+            document.getElementById('contactModal').classList.remove('hidden');
+            // Close the dropdown menu
+            document.getElementById('dropdownMenu').classList.add('hidden');
+        }
+
+        function closeContactModal() {
+            document.getElementById('contactModal').classList.add('hidden');
+        }
+    </script>
+</body>
+
+</html>
