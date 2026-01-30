@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual de Uso - Presupuesto Mensual 21</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+        }
+
+        .section-container {
+            scroll-margin-top: 80px;
+        }
+    </style>
+</head>
+
+<body class="bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 min-h-screen">
+
+    <!-- Header -->
+    <nav class="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 sticky top-0 z-40 no-print">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl flex items-center justify-center shadow-lg"
+                        style="background: linear-gradient(to bottom right, #0066CC, #0052A3);">
+                        <i class="fas fa-book-open text-white"></i>
+                    </div>
+                    <h1 class="text-xl font-bold text-slate-800 dark:text-white">Manual de Uso</h1>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="window.print()"
+                        class="px-3 py-1.5 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 rounded-lg transition-colors text-xs font-medium">
+                        <i class="fas fa-download mr-1 text-xs"></i>Exportar PDF
+                    </button>
+                    <a href="app.html" class="px-3 py-1.5 text-white rounded-lg transition-colors text-xs font-medium"
+                        style="background: linear-gradient(to right, #0066CC, #0052A3);">
+                        <i class="fas fa-arrow-left mr-1 text-xs"></i>Volver a App
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- Intro -->
+        <div
+            class="bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-slate-200 dark:border-slate-700 p-8 mb-8">
+            <div class="flex items-center gap-4 mb-6">
+                <div class="w-16 h-16 rounded-2xl flex items-center justify-center shadow-lg"
+                    style="background: linear-gradient(to bottom right, #0066CC, #0052A3);">
+                    <i class="fas fa-wallet text-white text-2xl"></i>
+                </div>
+                <div>
+                    <h2 class="text-3xl font-bold text-slate-800 dark:text-white">Presupuesto Mensual 21</h2>
+                    <p class="text-slate-600 dark:text-slate-300">Guía de funcionalidades</p>
+                </div>
+            </div>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed">
+                Esta guía explica las características principales de la aplicación y cómo aprovecharlas al máximo para
+                gestionar tus finanzas personales de manera efectiva.
+            </p>
+        </div>
+
+        <!-- Table of Contents -->
+        <div
+            class="bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-slate-200 dark:border-slate-700 p-6 mb-8 no-print">
+            <h3 class="text-xl font-bold text-slate-800 dark:text-white mb-4">
+                <i class="fas fa-list mr-2 text-indigo-600"></i>Contenido
+            </h3>
+            <nav class="space-y-2">
+                <a href="#checkboxes"
+                    class="block px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-lg transition-colors text-slate-700 dark:text-slate-300">
+                    1. Checkboxes en AHORROS
+                </a>
+                <a href="#celebration"
+                    class="block px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-lg transition-colors text-slate-700 dark:text-slate-300">
+                    2. Mensaje de Celebración
+                </a>
+                <a href="#pdf-export"
+                    class="block px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-lg transition-colors text-slate-700 dark:text-slate-300">
+                    3. Exportar a PDF
+                </a>
+                <a href="#currency"
+                    class="block px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-lg transition-colors text-slate-700 dark:text-slate-300">
+                    4. Cambiar Moneda
+                </a>
+                <a href="#charts"
+                    class="block px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-lg transition-colors text-slate-700 dark:text-slate-300">
+                    5. Gráficos de Distribución
+                </a>
+                <a href="#month-copy"
+                    class="block px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-lg transition-colors text-slate-700 dark:text-slate-300">
+                    6. Copiar al Siguiente Mes
+                </a>
+                <a href="#tips"
+                    class="block px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-lg transition-colors text-slate-700 dark:text-slate-300">
+                    7. Tips y Mejores Prácticas
+                </a>
+            </nav>
+        </div>
+
+        <!-- Section 1: Checkboxes en AHORROS -->
+        <div id="checkboxes"
+            class="section-container bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-slate-200 dark:border-slate-700 p-8 mb-8">
+            <h3 class="text-2xl font-bold text-slate-800 dark:text-white mb-4 flex items-center">
+                <span
+                    class="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center mr-3">
+                    <i class="fas fa-check-square text-blue-600 dark:text-blue-400"></i>
+                </span>
+                1. Checkboxes en AHORROS
+            </h3>
+
+            <div class="prose prose-slate dark:prose-invert max-w-none mb-6">
+                <p class="text-slate-700 dark:text-slate-300">
+                    Los checkboxes en la tarjeta de AHORROS tienen un comportamiento especial: <strong>solo descuentan
+                        del saldo disponible cuando están marcados</strong>.
+                </p>
+            </div>
+
+            <div class="bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 p-4 mb-6">
+                <h4 class="font-semibold text-blue-900 dark:text-blue-300 mb-2">💡 ¿Cómo funciona?</h4>
+                <ul class="text-sm text-blue-800 dark:text-blue-200 space-y-2">
+                    <li>✓ <strong>Check marcado</strong> = Ahorro comprometido → Se descuenta del saldo disponible</li>
+                    <li>✓ <strong>Check desmarcado</strong> = Ahorro planeado → NO se descuenta (aún no lo has apartado)
+                    </li>
+                </ul>
+            </div>
+
+            <img src="C:/Users/Angelo/.gemini/antigravity/brain/6305ef14-b707-4f58-a169-95bb70c29c92/manual_savings_checkbox_1769800962276.png"
+                alt="Funcionamiento de checkboxes en AHORROS"
+                class="rounded-lg shadow-lg border border-slate-200 dark:border-slate-700 w-full mb-4">
+
+            <div class="bg-slate-50 dark:bg-slate-700/50 rounded-lg p-4">
+                <h4 class="font-semibold text-slate-800 dark:text-white mb-2">📌 Ejemplo práctico:</h4>
+                <p class="text-sm text-slate-700 dark:text-slate-300">
+                    Si tienes €1,500 de ingresos y marcas "Fondo Emergencia €200", tu saldo disponible será €1,300.
+                    Si dejas "Inversiones €100" sin marcar, seguirás teniendo €1,300 disponibles hasta que lo marques.
+                </p>
+            </div>
+        </div>
+
+        <!-- Section 2: Celebration -->
+        <div id="celebration"
+            class="section-container bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-slate-200 dark:border-slate-700 p-8 mb-8">
+            <h3 class="text-2xl font-bold text-slate-800 dark:text-white mb-4 flex items-center">
+                <span
+                    class="w-10 h-10 bg-emerald-100 dark:bg-emerald-900/30 rounded-lg flex items-center justify-center mr-3">
+                    <i class="fas fa-trophy text-emerald-600 dark:text-emerald-400"></i>
+                </span>
+                2. Mensaje de Celebración
+            </h3>
+
+            <div class="prose prose-slate dark:prose-invert max-w-none mb-6">
+                <p class="text-slate-700 dark:text-slate-300">
+                    Cuando completas <strong>TODOS los checkboxes del mes</strong>, la app reconoce tu esfuerzo con un
+                    mensaje de felicitación.
+                </p>
+            </div>
+
+            <img src="C:/Users/Angelo/.gemini/antigravity/brain/6305ef14-b707-4f58-a169-95bb70c29c92/manual_celebration_complete_1769800976333.png"
+                alt="Mensaje de celebración"
+                class="rounded-lg shadow-lg border border-slate-200 dark:border-slate-700 w-full mb-4">
+
+            <div class="bg-emerald-50 dark:bg-emerald-900/20 border-l-4 border-emerald-500 p-4">
+                <h4 class="font-semibold text-emerald-900 dark:text-emerald-300 mb-2">🎉 ¿Cuándo aparece?</h4>
+                <p class="text-sm text-emerald-800 dark:text-emerald-200">
+                    El mensaje aparecerá automáticamente cuando marques el último checkbox pendiente del mes,
+                    indicando que fuiste consecuente con tu presupuesto.
+                </p>
+            </div>
+        </div>
+
+        <!-- Section 3: PDF Export -->
+        <div id="pdf-export"
+            class="section-container bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-slate-200 dark:border-slate-700 p-8 mb-8">
+            <h3 class="text-2xl font-bold text-slate-800 dark:text-white mb-4 flex items-center">
+                <span class="w-10 h-10 bg-red-100 dark:bg-red-900/30 rounded-lg flex items-center justify-center mr-3">
+                    <i class="fas fa-file-pdf text-red-600 dark:text-red-400"></i>
+                </span>
+                3. Exportar Historial a PDF
+            </h3>
+
+            <div class="prose prose-slate dark:prose-invert max-w-none mb-6">
+                <p class="text-slate-700 dark:text-slate-300">
+                    Puedes guardar tu presupuesto mensual en formato PDF para tener un historial local de tus finanzas.
+                </p>
+            </div>
+
+            <div class="space-y-4 mb-6">
+                <div class="flex items-start gap-3">
+                    <span
+                        class="w-8 h-8 bg-indigo-100 dark:bg-indigo-900/30 rounded-full flex items-center justify-center flex-shrink-0 text-indigo-600 dark:text-indigo-400 font-bold">1</span>
+                    <div>
+                        <p class="font-medium text-slate-800 dark:text-white">Abre el menú hamburguesa</p>
+                        <p class="text-sm text-slate-600 dark:text-slate-400">Haz click en el botón ☰ en la esquina
+                            superior derecha</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-3">
+                    <span
+                        class="w-8 h-8 bg-indigo-100 dark:bg-indigo-900/30 rounded-full flex items-center justify-center flex-shrink-0 text-indigo-600 dark:text-indigo-400 font-bold">2</span>
+                    <div>
+                        <p class="font-medium text-slate-800 dark:text-white">Selecciona "Exportar PDF"</p>
+                        <p class="text-sm text-slate-600 dark:text-slate-400">Se abrirá el diálogo de impresión de tu
+                            navegador</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-3">
+                    <span
+                        class="w-8 h-8 bg-indigo-100 dark:bg-indigo-900/30 rounded-full flex items-center justify-center flex-shrink-0 text-indigo-600 dark:text-indigo-400 font-bold">3</span>
+                    <div>
+                        <p class="font-medium text-slate-800 dark:text-white">Guarda como PDF</p>
+                        <p class="text-sm text-slate-600 dark:text-slate-400">Elige el destino y nombre del archivo</p>
+                    </div>
+                </div>
+            </div>
+
+            <img src="C:/Users/Angelo/.gemini/antigravity/brain/6305ef14-b707-4f58-a169-95bb70c29c92/manual_pdf_export_1769800989939.png"
+                alt="Exportar a PDF"
+                class="rounded-lg shadow-lg border border-slate-200 dark:border-slate-700 w-full mb-4">
+
+            <div class="bg-amber-50 dark:bg-amber-900/20 border-l-4 border-amber-500 p-4">
+                <h4 class="font-semibold text-amber-900 dark:text-amber-300 mb-2">💾 Consejo</h4>
+                <p class="text-sm text-amber-800 dark:text-amber-200">
+                    Exporta tu presupuesto al final de cada mes para mantener un archivo histórico offline de tus
+                    finanzas.
+                </p>
+            </div>
+        </div>
+
+        <!-- Section 4: Currency -->
+        <div id="currency"
+            class="section-container bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-slate-200 dark:border-slate-700 p-8 mb-8">
+            <h3 class="text-2xl font-bold text-slate-800 dark:text-white mb-4 flex items-center">
+                <span
+                    class="w-10 h-10 bg-yellow-100 dark:bg-yellow-900/30 rounded-lg flex items-center justify-center mr-3">
+                    <i class="fas fa-coins text-yellow-600 dark:text-yellow-400"></i>
+                </span>
+                4. Cambiar Tipo de Moneda
+            </h3>
+
+            <div class="prose prose-slate dark:prose-invert max-w-none mb-6">
+                <p class="text-slate-700 dark:text-slate-300">
+                    La app soporta múltiples monedas. Cambia la visualización según tu preferencia.
+                </p>
+            </div>
+
+            <div class="bg-slate-50 dark:bg-slate-700/50 rounded-lg p-6">
+                <h4 class="font-semibold text-slate-800 dark:text-white mb-4">Monedas disponibles:</h4>
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                    <div class="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300">
+                        <span class="text-lg">€</span> EUR (Euro)
+                    </div>
+                    <div class="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300">
+                        <span class="text-lg">$</span> USD (Dólar)
+                    </div>
+                    <div class="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300">
+                        <span class="text-lg">£</span> GBP (Libra)
+                    </div>
+                    <div class="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300">
+                        <span class="text-lg">¥</span> JPY (Yen)
+                    </div>
+                    <div class="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300">
+                        <span class="text-lg">$</span> MXN (Peso MX)
+                    </div>
+                    <div class="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300">
+                        <span class="text-lg">R$</span> BRL (Real)
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-4 bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 p-4">
+                <p class="text-sm text-blue-800 dark:text-blue-200">
+                    <strong>Nota:</strong> El cambio de moneda solo afecta la visualización. Los montos guardados
+                    permanecen iguales.
+                </p>
+            </div>
+        </div>
+
+        <!-- Section 5: Charts -->
+        <div id="charts"
+            class="section-container bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-slate-200 dark:border-slate-700 p-8 mb-8">
+            <h3 class="text-2xl font-bold text-slate-800 dark:text-white mb-4 flex items-center">
+                <span
+                    class="w-10 h-10 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center mr-3">
+                    <i class="fas fa-chart-pie text-purple-600 dark:text-purple-400"></i>
+                </span>
+                5. Gráficos de Distribución
+            </h3>
+
+            <div class="prose prose-slate dark:prose-invert max-w-none mb-6">
+                <p class="text-slate-700 dark:text-slate-300">
+                    El gráfico de distribución te muestra cómo se reparten tus egresos entre las diferentes categorías.
+                </p>
+            </div>
+
+            <div class="space-y-4">
+                <div class="bg-slate-50 dark:bg-slate-700/50 rounded-lg p-4">
+                    <h4 class="font-medium text-slate-800 dark:text-white mb-2">📊 ¿Qué muestra?</h4>
+                    <ul class="list-disc list-inside text-sm text-slate-700 dark:text-slate-300 space-y-1">
+                        <li>Porcentaje de cada categoría de egresos</li>
+                        <li>Comparación visual entre gastos fijos y variables</li>
+                        <li>Identificación rápida de tus mayores gastos</li>
+                    </ul>
+                </div>
+
+                <div class="bg-purple-50 dark:bg-purple-900/20 border-l-4 border-purple-500 p-4">
+                    <h4 class="font-semibold text-purple-900 dark:text-purple-300 mb-2">💡 Tip de análisis</h4>
+                    <p class="text-sm text-purple-800 dark:text-purple-200">
+                        Si una categoría ocupa más del 50% del gráfico, considera si puedes optimizar esos gastos.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 6: Month Copy -->
+        <div id="month-copy"
+            class="section-container bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-slate-200 dark:border-slate-700 p-8 mb-8">
+            <h3 class="text-2xl font-bold text-slate-800 dark:text-white mb-4 flex items-center">
+                <span
+                    class="w-10 h-10 bg-indigo-100 dark:bg-indigo-900/30 rounded-lg flex items-center justify-center mr-3">
+                    <i class="fas fa-calendar-plus text-indigo-600 dark:text-indigo-400"></i>
+                </span>
+                6. Copiar al Siguiente Mes
+            </h3>
+
+            <div class="prose prose-slate dark:prose-invert max-w-none mb-6">
+                <p class="text-slate-700 dark:text-slate-300">
+                    Al navegar al siguiente mes, puedes copiar tus datos del mes actual para no empezar desde cero.
+                </p>
+            </div>
+
+            <div class="bg-green-50 dark:bg-green-900/20 border-l-4 border-green-500 p-4 mb-4">
+                <h4 class="font-semibold text-green-900 dark:text-green-300 mb-2">✓ Qué se copia:</h4>
+                <ul class="text-sm text-green-800 dark:text-green-200 space-y-1">
+                    <li>✓ Nombres de todas las tarjetas</li>
+                    <li>✓ Conceptos y montos de items</li>
+                    <li>✓ Fechas ajustadas al nuevo mes</li>
+                </ul>
+            </div>
+
+            <div class="bg-orange-50 dark:bg-orange-900/20 border-l-4 border-orange-500 p-4">
+                <h4 class="font-semibold text-orange-900 dark:text-orange-300 mb-2">⚠️ Qué NO se copia:</h4>
+                <p class="text-sm text-orange-800 dark:text-orange-200">
+                    Los <strong>checkboxes se resetean automáticamente</strong>. Empiezas el nuevo mes con todas las
+                    tareas sin marcar.
+                </p>
+            </div>
+        </div>
+
+        <!-- Section 7: Tips -->
+        <div id="tips"
+            class="section-container bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-slate-200 dark:border-slate-700 p-8 mb-8">
+            <h3 class="text-2xl font-bold text-slate-800 dark:text-white mb-4 flex items-center">
+                <span
+                    class="w-10 h-10 bg-teal-100 dark:bg-teal-900/30 rounded-lg flex items-center justify-center mr-3">
+                    <i class="fas fa-lightbulb text-teal-600 dark:text-teal-400"></i>
+                </span>
+                7. Tips y Mejores Prácticas
+            </h3>
+
+            <div class="space-y-4">
+                <div class="border-l-4 border-teal-500 pl-4">
+                    <h4 class="font-medium text-slate-800 dark:text-white mb-1">🎯 Revisa diariamente</h4>
+                    <p class="text-sm text-slate-600 dark:text-slate-400">
+                        Marca los checkboxes conforme realizas los pagos o apartas los ahorros para mantener control en
+                        tiempo real.
+                    </p>
+                </div>
+
+                <div class="border-l-4 border-teal-500 pl-4">
+                    <h4 class="font-medium text-slate-800 dark:text-white mb-1">💰 Prioriza ahorros</h4>
+                    <p class="text-sm text-slate-600 dark:text-slate-400">
+                        Marca los checkboxes de AHORROS al inicio del mes para "pagarte a ti mismo primero".
+                    </p>
+                </div>
+
+                <div class="border-l-4 border-teal-500 pl-4">
+                    <h4 class="font-medium text-slate-800 dark:text-white mb-1">📱 100% Privado</h4>
+                    <p class="text-sm text-slate-600 dark:text-slate-400">
+                        Todos tus datos se guardan localmente en tu navegador. Nada se envía a servidores externos.
+                    </p>
+                </div>
+
+                <div class="border-l-4 border-teal-500 pl-4">
+                    <h4 class="font-medium text-slate-800 dark:text-white mb-1">💾 Exporta regularmente</h4>
+                    <p class="text-sm text-slate-600 dark:text-slate-400">
+                        Descarga PDFs mensuales como respaldo de tu historial financiero.
+                    </p>
+                </div>
+
+                <div class="border-l-4 border-teal-500 pl-4">
+                    <h4 class="font-medium text-slate-800 dark:text-white mb-1">📊 Analiza tendencias</h4>
+                    <p class="text-sm text-slate-600 dark:text-slate-400">
+                        Usa los gráficos para identificar patrones de gasto y oportunidades de ahorro.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="text-center py-8 border-t border-slate-200 dark:border-slate-700">
+            <p class="text-slate-600 dark:text-slate-400 text-sm mb-2">
+                ¿Necesitas ayuda adicional?
+            </p>
+            <a href="app.html" onclick="setTimeout(() => openContactModal(), 100)"
+                class="inline-flex items-center gap-2 text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 font-medium">
+                <i class="fas fa-envelope"></i>
+                Contactar soporte
+            </a>
+        </div>
+
+    </main>
+
+    <script>
+        // Theme initialization
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        }
+    </script>
+
+</body>
+
+</html>

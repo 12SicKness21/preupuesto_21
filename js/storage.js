@@ -58,6 +58,15 @@ const Storage = {
         const nextMonthData = JSON.parse(JSON.stringify(currentData));
         nextMonthData.copiedFrom = currentMonthKey;
 
+        // Reset all checkboxes to unchecked state for the new month
+        nextMonthData.cards.forEach(card => {
+            if (card.items) {
+                card.items.forEach(item => {
+                    item.completed = false;
+                });
+            }
+        });
+
         this.saveMonthData(nextMonthKey, nextMonthData);
         return nextMonthKey;
     },
@@ -305,11 +314,15 @@ const Storage = {
         const copiedData = JSON.parse(JSON.stringify(sourceData));
         copiedData.copiedFrom = sourceMonthKey;
 
-        // Update all item dates to the target month
+        // Update all item dates to the target month and reset checkboxes
         const [targetYear, targetMonth] = targetMonthKey.split('-').map(Number);
         copiedData.cards.forEach(card => {
             if (card.items) {
                 card.items.forEach(item => {
+                    // Reset checkbox state for new month
+                    item.completed = false;
+                    
+                    // Update date to target month
                     if (item.date) {
                         const dateParts = item.date.split('-');
                         if (dateParts.length === 3) {
