@@ -80,7 +80,7 @@ const App = {
      * Handle month navigation with auto-save logic
      * @param {string} newMonthKey 
      */
-    handleMonthNavigation(newMonthKey) {
+    async handleMonthNavigation(newMonthKey) {
         // If this is the first load or same month, just load it
         if (!this.previousMonthKey || this.previousMonthKey === newMonthKey) {
             this.loadMonth(newMonthKey);
@@ -103,7 +103,13 @@ const App = {
             }
 
             // Always ask user if they want to copy data to next month
-            const shouldCopy = confirm('¿Deseas copiar los datos del mes actual al siguiente mes?');
+            // Always ask user if they want to copy data to next month
+            const shouldCopy = await Modal.confirm(
+                'Copiar Datos',
+                '¿Deseas copiar los datos del mes actual al siguiente mes?',
+                'Copiar y Avanzar',
+                'Solo Avanzar'
+            );
 
             if (shouldCopy) {
                 // Copy data to next month
@@ -252,17 +258,29 @@ const App = {
     /**
      * Save current month data
      */
-    saveData() {
+    async saveData() {
         // Data is already saved in real-time, but we ask about copying to next month
-        const shouldCopy = confirm('✅ Datos guardados.\n\n¿Deseas copiar estos datos al siguiente mes?');
+        const shouldCopy = await Modal.confirm(
+            'Datos Guardados',
+            '¿Deseas copiar estos datos al siguiente mes?',
+            'Copiar',
+            'No, gracias'
+        );
 
         if (shouldCopy) {
             const nextMonthKey = Storage.copyToNextMonth(this.currentMonthKey);
             if (nextMonthKey) {
-                alert(`✅ Datos copiados al mes ${nextMonthKey}`);
+                // Modified to not use alert, just log and ask to move
+                console.log(`✅ Datos copiados al mes ${nextMonthKey}`);
 
                 // Optionally navigate to next month
-                const goToNext = confirm('¿Deseas ir al siguiente mes ahora?');
+                const goToNext = await Modal.confirm(
+                    'Datos Copiados',
+                    `Se han copiado los datos a ${nextMonthKey}. ¿Deseas ir allí ahora?`,
+                    'Ir al mes siguiente',
+                    'Quedarme aquí'
+                );
+
                 if (goToNext) {
                     const [year, month] = nextMonthKey.split('-').map(Number);
                     Calendar.goToMonth(year, month);
