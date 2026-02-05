@@ -128,8 +128,9 @@ html {
     /* Fix sticky positioning for print */
     .sticky {
         position: static !important;
-        display: flex !important;
-        flex-direction: column !important;
+        display: block !important; /* Changed from flex to block to avoid layout issues */
+        height: auto !important;
+        width: 100% !important;
     }
 
     /* Ensure grid displays correctly */
@@ -139,12 +140,31 @@ html {
     }
 
     .grid>div {
-        margin-bottom: 1rem;
+        margin-bottom: 0.5rem;
     }
 
-    /* Calendar parent container should be first */
-    .lg\:col-span-1 {
-        order: -1 !important;
+    /* Print Header - Force specific styling */
+    .print-header {
+        position: static !important;
+        display: block !important;
+        background: transparent !important;
+        padding: 0 !important;
+        margin: 0 0 1rem 0 !important;
+        width: 100% !important;
+        height: auto !important;
+    }
+
+    .print-header > div {
+        display: block !important;
+        padding: 0 !important;
+    }
+
+    /* Target the calendar wrapper specifically */
+    .print-header .lg\:col-span-1 {
+        display: block !important;
+        width: 100% !important;
+        order: -9999 !important;
+        margin-bottom: 1rem !important;
     }
 
     /* Remove background gradients */
