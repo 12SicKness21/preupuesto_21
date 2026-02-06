@@ -33,10 +33,41 @@
 
             body {
                 background: white !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
             }
 
             .print-break {
                 page-break-after: always;
+            }
+
+            /* Disable sticky positioning for print */
+            .sticky,
+            .sticky-top,
+            .fixed {
+                position: static !important;
+            }
+
+            /* Ensure header containers don't overlay content */
+            nav,
+            .print-header {
+                position: static !important;
+                background: white !important;
+                box-shadow: none !important;
+                margin-top: 0 !important;
+                padding-top: 0 !important;
+            }
+
+            /* Hide the main nav bar in print if not already hidden by no-print logic */
+            nav {
+                display: none !important;
+            }
+
+            /* Ensure calendar container (which is inside print-header) is visible and at top */
+            .print-header {
+                display: block !important;
+                margin-bottom: 20px !important;
+                border-bottom: 1px solid #ccc;
             }
         }
 
@@ -454,6 +485,48 @@
                 <div id="modalCustomFooter"
                     class="hidden flex-col border-t border-slate-100 dark:border-slate-700 divide-y divide-slate-100 dark:divide-slate-700">
                     <!-- Buttons will be injected here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Savings History Modal -->
+    <div id="historyModal" class="fixed inset-0 z-50 hidden" role="dialog" aria-modal="true">
+        <!-- Backdrop -->
+        <div class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm transition-opacity"
+            onclick="Cards.closeHistoryModal()">
+        </div>
+
+        <div class="fixed inset-0 z-10 overflow-y-auto flex items-center justify-center p-4">
+            <div
+                class="relative transform overflow-hidden rounded-2xl bg-white dark:bg-slate-800 text-left shadow-xl transition-all w-full max-w-lg flex flex-col max-h-[80vh]">
+                <!-- Header -->
+                <div
+                    class="px-6 py-4 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center bg-slate-50 dark:bg-slate-700/30">
+                    <h3 class="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                        <i class="fas fa-piggy-bank text-cyan-500"></i>
+                        Historial de Ahorros
+                    </h3>
+                    <button onclick="Cards.closeHistoryModal()"
+                        class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+
+                <!-- Content -->
+                <div class="p-0 overflow-y-auto flex-1" id="historyModalContent">
+                    <!-- History items will be injected here -->
+                </div>
+
+                <!-- Footer -->
+                <div
+                    class="px-6 py-4 bg-slate-50 dark:bg-slate-700/50 border-t border-slate-100 dark:border-slate-700 flex justify-between items-center">
+                    <div class="text-sm text-slate-500 dark:text-slate-400">
+                        Total acumulado:
+                    </div>
+                    <div class="text-xl font-bold text-cyan-600 dark:text-cyan-400" id="historyModalTotal">
+                        €0.00
+                    </div>
                 </div>
             </div>
         </div>

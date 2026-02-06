@@ -78,17 +78,37 @@ const Cards = {
         }
 
         // Card header with dynamic hex colors
+        // Special content for Savings card
+        let savingsHeaderInfo = '';
+        if (card.type === 'savings') {
+            const cumulativeTotal = Storage.getCumulativeSavings(this.currentMonthKey, card.id);
+            savingsHeaderInfo = `
+                <div class="flex items-center gap-2 text-sm font-medium mr-2" style="color: ${cardColor};">
+                    <span class="hidden sm:inline">Total:</span>
+                    <span class="font-bold">${Currency.format(cumulativeTotal)}</span>
+                    <button onclick="Cards.showSavingsHistory('${card.id}')" 
+                        class="ml-2 w-7 h-7 rounded-full flex items-center justify-center hover:bg-black/5 transition-colors"
+                        title="Ver Historial Detallado">
+                        <i class="fas fa-list-ul text-xs"></i>
+                    </button>
+                </div>
+            `;
+        }
+
         let headerHTML = `
             <div class="p-4 flex items-center justify-between border-b" style="background: linear-gradient(to right, ${cardColor}15, ${cardColor}10); border-color: ${cardColor}40;">
                 <div class="flex items-center gap-2">
                     <h3 class="text-lg font-bold cursor-pointer hover:opacity-70 transition-opacity" style="color: ${cardColor};" onclick="Cards.editCardTitle('${card.id}')" title="Click para editar/eliminar">${card.title}</h3>
                 </div>
-                <button onclick="Cards.openAddItemModal('${card.id}')" 
-                    class="w-8 h-8 text-white rounded-lg flex items-center justify-center transition-opacity hover:opacity-90 shadow-md hover:shadow-lg"
-                    style="background-color: ${cardColor};"
-                    title="Agregar elemento">
-                    <i class="fas fa-plus"></i>
-                </button>
+                <div class="flex items-center gap-2">
+                    ${savingsHeaderInfo}
+                    <button onclick="Cards.openAddItemModal('${card.id}')" 
+                        class="w-8 h-8 text-white rounded-lg flex items-center justify-center transition-opacity hover:opacity-90 shadow-md hover:shadow-lg"
+                        style="background-color: ${cardColor};"
+                        title="Agregar elemento">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
             </div>
         `;
 
@@ -562,6 +582,93 @@ const Cards = {
 
         // Update charts
         Charts.updateAll(this.currentMonthData);
+    },
+
+    /**
+     * Show savings history modal
+     * @param {string} cardId 
+     */
+    showSavingsHistory(cardId) {
+        const allData = Storage.getData();
+        const monthKeys = Object.keys(allData).sort().reverse(); // Newest first
+        const historyContainer = document.getElementById('historyModalContent');
+        const totalEl = document.getElementById('historyModalTotal');
+
+        let html = '';
+        let grandTotal = 0;
+
+        // Group by month
+        monthKeys.forEach(monthKey => {
+            if (monthKey > this.currentMonthKey) return; // Don't show future months if they exist (optional)
+
+            const monthData = allData[monthKey];
+            const card = monthData.cards?.find(c => c.id === cardId);
+
+            if (card && card.items && card.items.some(i => i.completed)) {
+                // Filter only completed items
+                const completedItems = card.items.filter(i => i.completed);
+
+                if (completedItems.length > 0) {
+                    const monthTotal = completedItems.reduce((sum, i) => sum + (parseFloat(i.amount) || 0), 0);
+                    grandTotal += monthTotal;
+
+                    // Format month header
+                    const [year, month] = monthKey.split('-');
+                    const dateObj = new Date(year, month - 1);
+                    const monthName = dateObj.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' });
+                    const monthNameCapitalized = monthName.charAt(0).toUpperCase() + monthName.slice(1);
+
+                    html += `
+                        <div class="border-b border-slate-100 dark:border-slate-700 last:border-0">
+                            <div class="px-6 py-3 bg-slate-50 dark:bg-slate-700/30 flex justify-between items-center">
+                                <span class="font-semibold text-slate-700 dark:text-slate-300 text-sm">${monthNameCapitalized}</span>
+                                <span class="font-bold text-cyan-600 dark:text-cyan-400 text-sm">${Currency.format(monthTotal)}</span>
+                            </div>
+                            <div class="divide-y divide-slate-50 dark:divide-slate-700/50">
+                    `;
+
+                    completedItems.forEach(item => {
+                        html += `
+                            <div class="px-6 py-3 flex justify-between items-center hover:bg-slate-50 dark:hover:bg-slate-700/10 transition-colors">
+                                <div class="flex flex-col">
+                                    <span class="font-medium text-slate-700 dark:text-slate-200">${item.name}</span>
+                                    <span class="text-xs text-slate-400">${item.date || 'Sin fecha'}</span>
+                                </div>
+                                <span class="font-semibold text-slate-800 dark:text-white">${Currency.format(item.amount)}</span>
+                            </div>
+                        `;
+                    });
+
+                    html += `
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+        });
+
+        if (html === '') {
+            html = `
+                <div class="p-8 text-center text-slate-500 dark:text-slate-400 flex flex-col items-center gap-3">
+                    <div class="w-16 h-16 bg-slate-100 dark:bg-slate-700/50 rounded-full flex items-center justify-center">
+                        <i class="fas fa-piggy-bank text-2xl text-slate-300"></i>
+                    </div>
+                    <p>No hay ahorros registrados aún.</p>
+                </div>
+            `;
+        }
+
+        historyContainer.innerHTML = html;
+        totalEl.textContent = Currency.format(grandTotal);
+
+        document.getElementById('historyModal').classList.remove('hidden');
+    },
+
+    /**
+     * Close history modal
+     */
+    closeHistoryModal() {
+        document.getElementById('historyModal').classList.add('hidden');
     }
 };
 

@@ -176,7 +176,9 @@ const Storage = {
             const savingsCard = monthData.cards?.find(c => c.id === savingsCardId);
             if (savingsCard && savingsCard.items) {
                 savingsCard.items.forEach(item => {
-                    total += parseFloat(item.amount) || 0;
+                    if (item.completed) {
+                        total += parseFloat(item.amount) || 0;
+                    }
                 });
             }
         }
@@ -321,7 +323,7 @@ const Storage = {
                 card.items.forEach(item => {
                     // Reset checkbox state for new month
                     item.completed = false;
-                    
+
                     // Update date to target month
                     if (item.date) {
                         const dateParts = item.date.split('-');
