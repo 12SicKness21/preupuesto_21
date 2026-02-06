@@ -248,7 +248,10 @@ const Cards = {
         const fecha = document.getElementById('itemFecha').value;
 
         if (!concepto) {
-            alert('Por favor ingresa un concepto');
+            // alert('Por favor ingresa un concepto');
+            // Using logic validation instead of alert for better UX in modal context
+            document.getElementById('itemConcepto').classList.add('border-red-500');
+            setTimeout(() => document.getElementById('itemConcepto').classList.remove('border-red-500'), 2000);
             return;
         }
 
@@ -288,10 +291,11 @@ const Cards = {
     /**
      * Delete current item being edited in modal
      */
-    deleteCurrentItem() {
+    async deleteCurrentItem() {
         if (!this.currentEditingItem) return;
 
-        if (!confirm('¿Eliminar este elemento?')) return;
+        const confirmed = await Modal.confirm('Eliminar Elemento', '¿Eliminar este elemento?', 'Eliminar', 'Cancelar');
+        if (!confirmed) return;
 
         const card = this.currentMonthData.cards.find(c => c.id === this.currentEditingCard);
         if (!card || !card.items) return;
@@ -387,7 +391,7 @@ const Cards = {
      * Edit card title - Opens dialog with edit/delete options
      * @param {string} cardId 
      */
-    editCardTitle(cardId) {
+    async editCardTitle(cardId) {
         const card = this.currentMonthData.cards.find(c => c.id === cardId);
         if (!card) return;
 
@@ -395,25 +399,51 @@ const Cards = {
         const defaultIds = ['ingreso', 'ahorros', 'gastos-fijos', 'gastos-variados', 'giros'];
         const isProtected = defaultIds.includes(cardId);
 
+        // Prepare options
+        const options = [];
+
+        if (card.editable) {
+            options.push({
+                text: 'Editar Nombre',
+                value: 'edit',
+                icon: 'fas fa-pen',
+                class: 'text-indigo-600 dark:text-indigo-400'
+            });
+        }
+
+        if (!isProtected) {
+            options.push({
+                text: 'Eliminar Tarjeta',
+                value: 'delete',
+                icon: 'fas fa-trash-can',
+                class: 'text-red-600 dark:text-red-400'
+            });
+        }
+
+        if (options.length === 0) return;
+
         // Show options dialog
-        let message = `Tarjeta: ${card.title}\n\n`;
-        message += card.editable ? '1. Editar nombre\n' : '';
-        message += isProtected ? '' : '2. Eliminar tarjeta\n';
-        message += '\nIngresa el número de la opción (Cancelar para salir):';
+        const choice = await Modal.showOptions(
+            `Tarjeta: ${card.title}`,
+            'Selecciona una opción:',
+            options
+        );
 
-        const option = prompt(message);
+        if (choice === 'edit') {
+            const newTitle = await Modal.prompt(
+                'Editar Nombre',
+                'Ingresa el nuevo nombre para la tarjeta:',
+                card.title,
+                'Ej. Comida'
+            );
 
-        if (option === '1' && card.editable) {
-            // Edit title
-            const newTitle = prompt('Nuevo nombre de la tarjeta:', card.title);
             if (newTitle && newTitle.trim()) {
                 card.title = newTitle.trim();
                 Storage.saveMonthData(this.currentMonthKey, this.currentMonthData);
                 this.renderAllCards();
                 App.hasUnsavedChanges = true;
             }
-        } else if (option === '2' && !isProtected) {
-            // Delete card
+        } else if (choice === 'delete') {
             this.deleteCard(cardId);
         }
     },
@@ -422,15 +452,22 @@ const Cards = {
      * Delete entire card
      * @param {string} cardId 
      */
-    deleteCard(cardId) {
+    async deleteCard(cardId) {
         // Don't delete default cards
         const defaultIds = ['ingreso', 'ahorros', 'gastos-fijos', 'gastos-variados', 'giros'];
         if (defaultIds.includes(cardId)) {
-            alert('No puedes eliminar tarjetas predeterminadas.');
+            Modal.confirm('Acción no permitida', 'No puedes eliminar tarjetas predeterminadas.', 'Entendido', 'Cerrar');
             return;
         }
 
-        if (!confirm('¿Estás seguro de que deseas eliminar esta tarjeta?')) return;
+        const confirmed = await Modal.confirm(
+            'Eliminar Tarjeta',
+            '¿Estás seguro de que deseas eliminar esta tarjeta y todos sus elementos?',
+            'Eliminar',
+            'Cancelar'
+        );
+
+        if (!confirmed) return;
 
         this.currentMonthData.cards = this.currentMonthData.cards.filter(c => c.id !== cardId);
         Storage.saveMonthData(this.currentMonthKey, this.currentMonthData);
@@ -442,8 +479,14 @@ const Cards = {
     /**
      * Add new custom card - Always creates expense type
      */
-    addNewCard() {
-        const title = prompt('Nombre de la nueva tarjeta de egreso:');
+    async addNewCard() {
+        const title = await Modal.prompt(
+            'Nueva Tarjeta',
+            'Ingresa el nombre para la nueva tarjeta de egreso:',
+            '',
+            'Ej. Mascotas'
+        );
+
         if (!title) return;
 
         const newCard = {

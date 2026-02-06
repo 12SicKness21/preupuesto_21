@@ -421,18 +421,25 @@
                 <div class="p-6 pb-4 text-center">
                     <div
                         class="w-16 h-16 bg-indigo-100 dark:bg-indigo-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-question text-2xl text-indigo-600 dark:text-indigo-400"></i>
+                        <i id="modalIcon" class="fas fa-question text-2xl text-indigo-600 dark:text-indigo-400"></i>
                     </div>
                     <h3 id="modalTitle" class="text-xl font-bold text-slate-800 dark:text-white mb-2">
                         ¿Estás seguro?
                     </h3>
-                    <p id="modalMessage" class="text-slate-600 dark:text-slate-300">
+                    <p id="modalMessage" class="text-slate-600 dark:text-slate-300 mb-4">
                         Esta acción no se puede deshacer.
                     </p>
+
+                    <!-- Input Field (Hidden by default) -->
+                    <div id="modalInputContainer" class="hidden mb-2">
+                        <input type="text" id="modalInput"
+                            class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none text-slate-800 dark:text-white"
+                            placeholder="">
+                    </div>
                 </div>
 
-                <!-- Footer -->
-                <div class="flex border-t border-slate-100 dark:border-slate-700">
+                <!-- Footer (Standard Buttons) -->
+                <div id="modalStandardFooter" class="flex border-t border-slate-100 dark:border-slate-700">
                     <button id="modalCancelBtn" onclick="Modal.onCancel()"
                         class="flex-1 px-4 py-3 text-slate-600 dark:text-slate-400 font-medium hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors border-r border-slate-100 dark:border-slate-700">
                         Cancelar
@@ -441,6 +448,12 @@
                         class="flex-1 px-4 py-3 text-indigo-600 dark:text-indigo-400 font-bold hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition-colors">
                         Aceptar
                     </button>
+                </div>
+
+                <!-- Footer (Custom Options) -->
+                <div id="modalCustomFooter"
+                    class="hidden flex-col border-t border-slate-100 dark:border-slate-700 divide-y divide-slate-100 dark:divide-slate-700">
+                    <!-- Buttons will be injected here -->
                 </div>
             </div>
         </div>
